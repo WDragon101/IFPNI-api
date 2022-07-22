@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import time
-from tkinter import END
-import tkinter.font as tf
 
 
 class IFPNI():
@@ -68,11 +66,7 @@ class IFPNI():
                 href = item.find('h1', class_='lead list-group-item-heading').find('a')['href']
                 self.hrefs.append(f"http://www.ifpni.org{href}")
 
-    def claw_item(self, widget, show_widget):
-        title_font = tf.Font(family='Arial', size=14)
-        show_widget.tag_config('title', font=title_font, foreground='red', wrap='none')
-        text_font = tf.Font(family='Arial', size=8)
-        show_widget.tag_config('text', font=text_font, foreground='#111', wrap='none')
+    def claw_item(self):
         count = 0
         for href in self.hrefs:
             count += 1
@@ -93,11 +87,6 @@ class IFPNI():
                 dd = dd.text.strip().replace('\n', '')
                 values.append(f'''{dd.text}''')
             item = {'id': id, 'rank': rank, 'title': title, 'nomen': nomen, 'tabel': dict(zip(keys, values))}
-            widget.insert(END, f"{count}--{nomen}--Done.\n")
-            widget.see(END)
-            show_widget.insert(END, item['nomen']+'\n', 'title')
-            for key, value in item['tabel'].items():
-                show_widget.insert(END, f"\t{key.strip()}\t\t\t{value.strip()}\n", 'text')
             self.items.append(item)
 
     def inner_pro(self):
