@@ -88,6 +88,7 @@ class IFPNI():
                 values.append(f'''{dd.text}''')
             item = {'id': id, 'rank': rank, 'title': title, 'nomen': nomen, 'tabel': dict(zip(keys, values))}
             self.items.append(item)
+        print('search over')
 
     def inner_pro(self):
         self.url_build()
