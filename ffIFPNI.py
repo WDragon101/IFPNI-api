@@ -44,10 +44,12 @@ class IFPNI():
         self.pages = 0
         self.hrefs = []
         self.items = []
+        self.inner_pro()
 
     def url_build(self):
         self.url = self.ifpni_org + self.ifpni_order_org[self.source] + '?' + '&'.join([self.ifpni_common_url_part, self.ifpni_special_url_part[self.source]])
-
+        print(f"Searching {self.url} responses...")
+        
     def judge_items(self):
         self.hrefs.clear()
         time.sleep(0.3)
@@ -65,11 +67,13 @@ class IFPNI():
             for item in items:
                 href = item.find('h1', class_='lead list-group-item-heading').find('a')['href']
                 self.hrefs.append(f"http://www.ifpni.org{href}")
+        print(f"Find {len(self.hrefs)} items, processing get details...")
 
     def claw_item(self):
         count = 0
         for href in self.hrefs:
             count += 1
+            print(f"{count} \t\t {href} ", end='')
             res = requests.get(url=href, headers=self.headers)
             soup = BeautifulSoup(res.text, 'html.parser')
             id_pre = soup.find('div', class_='panel panel-default').find('div', class_='panel-heading').find_all('span')
@@ -78,6 +82,7 @@ class IFPNI():
             title = soup.find('div', class_='panel-body').find('h1').text
             nomen = soup.find('div', id='nomenQuote').text
             table = soup.find('dl', class_='dl-horizontal')
+            print(f"\t {title}", end='')
             keys = []
             for dt in table.find_all('dt'):
                 dt = dt.text.strip().replace('\n', '')
@@ -85,8 +90,9 @@ class IFPNI():
             values = []
             for dd in table.find_all('dd'):
                 dd = dd.text.strip().replace('\n', '')
-                values.append(f'''{dd.text}''')
+                values.append(f'''{dd}''')
             item = {'id': id, 'rank': rank, 'title': title, 'nomen': nomen, 'tabel': dict(zip(keys, values))}
+            print(f"\t over")
             self.items.append(item)
         print('search over')
 
