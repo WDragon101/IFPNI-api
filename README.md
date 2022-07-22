@@ -117,3 +117,7 @@ Here give you an simplest example:
 
 my = IFPNI(source='species', name='mahonia')
 
+wait some minuts, and result will be save as list and you can print them by my.items
+
+for i in my.items:
+    print(i)
